@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block body %}
+<div class="container mt-5">
+    <div class="row d-flex justify-content-center">
+        <div class="col-lg-4 col-sm-12 text-center p-3 shadow">
+            <strong><h2>Pay with PayPal</h2></strong>
+            <br>
+            {{ form.render }}
+        </div>
+    </div>
+</div>
+   
+{% endblock body %}
+    
+   

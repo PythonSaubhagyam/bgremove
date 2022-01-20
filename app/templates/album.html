@@ -1,0 +1,127 @@
+{% extends 'base.html' %} {% load static %} {% block body %}
+<div class="container-fluid">
+ 
+  <div class="row p-5 ">
+    <div class="col-lg-2 col-sm-12 border-right ">
+      <div class="list-group">
+        <a
+          href="{% url 'dashboard' %}"
+          class="list-group-item list-group-item-action "
+        >
+          <strong>Profile</strong>
+        </a>
+        <a
+          href="{% url 'album' %}"
+          type="button"
+          class="list-group-item list-group-item-action active"
+          >Your Images</a
+        >
+      </div>
+      <br>
+      <br>
+    </div>
+   
+    <div class="col-lg-10 col-sm-12 shadow p-2">
+      <div class="p-3 text-muted" style="font-size: 20px">
+        <h3>Your Images : {{get_images.count}}</h3>
+      </div>
+
+      
+      <div class="container">
+        
+        <div class="row">
+          {% for i in get_images %}
+          
+          {% if i.out_image %}
+            
+          
+            
+          <div class="col-lg-3 col-sm-12">
+            <div class="p-2 text-center bg-danger text-light mt-2">
+              <a href="{% url 'remove' i.id %}"><i class="fa fa-trash" style="font-size:20px"></i></a>
+              <a href="{% url 'edit' %}?iid={{i.id}}"><i class="fa fa-edit" style="font-size:20px"></i></a></div>
+            <a
+              class="thumbnail"
+              href="#"
+              data-image-id=""
+              data-toggle="modal"
+              data-title=""
+              data-image="{{i.out_image.url}}"
+              data-target="#image-gallery"
+            >
+              <img style="height: 150px;"
+                class=""
+                src="{{i.out_image.url}}"
+                alt="Another alt text"
+              />
+            </a>
+            <div class="p-2 text-center bg-dark text-light">
+              
+              <a href="https://www.facebook.com/sharer/sharer.php?u=http://127.0.0.1:8000{{i.out_image.url}}"  ><i class="fab fa-facebook-f fa-lg p-2 "></i></a>
+              <a href="https://twitter.com/intent/tweet?url=www.google.com"  ><i class="fab fa-twitter fa-lg p-2"></i></a>
+              <a href="{% url 'mailrespond' %}?iid={{i.id}}"  ><i class="fa fa-envelope" style="font-size:20px"></i></a>
+              
+            </div>
+            
+          </div>
+          {% endif %}
+          {% endfor %}
+          <div class="row">
+            
+
+          </div>
+         
+          <div
+            class="modal fade"
+            id="image-gallery"
+            tabindex="-1"
+            role="dialog"
+            aria-labelledby="myModalLabel"
+            aria-hidden="true"
+        >
+            <div class="modal-dialog modal-lg">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h4 class="modal-title" id="image-gallery-title"></h4>
+                  <button type="button" class="close" data-dismiss="modal">
+                    <span aria-hidden="true">×</span
+                    ><span class="sr-only">Close</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  <img
+                    id="image-gallery-image"
+                    class="img-responsive col-md-12"
+                    src=""
+                  />
+                </div>
+                <div class="modal-footer">
+                  <button
+                    type="button"
+                    class="btn btn-secondary float-left"
+                    id="show-previous-image"
+                  >
+                    <i class="fa fa-arrow-left"></i>
+                  </button>
+
+                  <button
+                    type="button"
+                    id="show-next-image"
+                    class="btn btn-secondary float-right"
+                  >
+                    <i class="fa fa-arrow-right"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          
+          
+        </div>
+      </div> 
+    </div>
+   
+  </div>
+</div>
+{% endblock body %}

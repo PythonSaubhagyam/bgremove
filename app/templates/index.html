@@ -1,0 +1,745 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block head %}
+<style type="text/css">
+  .ctn-preloader {
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    cursor: default;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    height: 100%;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    z-index: 9000;
+  }
+
+  .ctn-preloader .animation-preloader {
+    z-index: 1000;
+  }
+
+  .ctn-preloader .animation-preloader .spinner {
+    -webkit-animation: spinner 1s infinite linear;
+    animation: spinner 1s infinite linear;
+    border-radius: 50%;
+    border: 3px solid rgba(0, 0, 0, 0.2);
+    border-top-color: #048ec5;
+    height: 150px;
+    margin: 0 auto 3.5em auto;
+    width: 150px;
+  }
+
+  .ctn-preloader .animation-preloader .txt-loading {
+    font: bold 5em "Roboto", sans-serif;
+    text-align: center;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+  }
+
+  .ctn-preloader .animation-preloader .txt-loading .letters-loading {
+    color: rgba(0, 0, 0, 0.2);
+    position: relative;
+  }
+
+  .ctn-preloader .animation-preloader .txt-loading .letters-loading:before {
+    -webkit-animation: letters-loading 4s infinite;
+    animation: letters-loading 4s infinite;
+    color: #000000;
+    content: attr(data-text-preloader);
+    left: 0;
+    opacity: 0;
+    font-family: "Roboto", sans-serif;
+    position: absolute;
+    top: -3px;
+    -webkit-transform: rotateY(-90deg);
+    transform: rotateY(-90deg);
+  }
+
+  .ctn-preloader .animation-preloader .txt-loading .letters-loading:nth-child(2):before {
+    -webkit-animation-delay: 0.2s;
+    animation-delay: 0.2s;
+  }
+
+  .ctn-preloader .animation-preloader .txt-loading .letters-loading:nth-child(3):before {
+    -webkit-animation-delay: 0.4s;
+    animation-delay: 0.4s;
+  }
+
+  .ctn-preloader .animation-preloader .txt-loading .letters-loading:nth-child(4):before {
+    -webkit-animation-delay: 0.6s;
+    animation-delay: 0.6s;
+  }
+
+  .ctn-preloader .animation-preloader .txt-loading .letters-loading:nth-child(5):before {
+    -webkit-animation-delay: 0.8s;
+    animation-delay: 0.8s;
+  }
+
+  .ctn-preloader .animation-preloader .txt-loading .letters-loading:nth-child(6):before {
+    -webkit-animation-delay: 1s;
+    animation-delay: 1s;
+  }
+
+  .ctn-preloader .animation-preloader .txt-loading .letters-loading:nth-child(7):before {
+    -webkit-animation-delay: 1.2s;
+    animation-delay: 1.2s;
+  }
+
+  .ctn-preloader .animation-preloader .txt-loading .letters-loading:nth-child(8):before {
+    -webkit-animation-delay: 1.4s;
+    animation-delay: 1.4s;
+  }
+
+  .ctn-preloader.dark .animation-preloader .spinner {
+    border-color: rgba(255, 255, 255, 0.2);
+    border-top-color: #fff;
+  }
+
+  .ctn-preloader.dark .animation-preloader .txt-loading .letters-loading {
+    color: rgba(255, 255, 255, 0.2);
+  }
+
+  .ctn-preloader.dark .animation-preloader .txt-loading .letters-loading:before {
+    color: #fff;
+  }
+
+  .ctn-preloader p {
+    font-size: 14px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 8px;
+    color: #3b3b3b;
+  }
+
+  .ctn-preloader .loader {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    font-size: 0;
+    z-index: 1;
+    pointer-events: none;
+  }
+
+  .ctn-preloader .loader .row {
+    height: 100%;
+  }
+
+  .ctn-preloader .loader .loader-section {
+    padding: 0px;
+  }
+
+  .ctn-preloader .loader .loader-section .bg {
+    background-color: #ffffff;
+    height: 100%;
+    left: 0;
+    width: 100%;
+    -webkit-transition: all 800ms cubic-bezier(0.77, 0, 0.175, 1);
+    -o-transition: all 800ms cubic-bezier(0.77, 0, 0.175, 1);
+    transition: all 800ms cubic-bezier(0.77, 0, 0.175, 1);
+  }
+
+  .ctn-preloader .loader.dark_bg .loader-section .bg {
+    background: #111339;
+  }
+
+  .ctn-preloader.loaded .animation-preloader {
+    opacity: 0;
+    -webkit-transition: 0.3s ease-out;
+    -o-transition: 0.3s ease-out;
+    transition: 0.3s ease-out;
+  }
+
+  .ctn-preloader.loaded .loader-section .bg {
+    width: 0;
+    -webkit-transition: 0.7s 0.3s allcubic-bezier(0.1, 0.1, 0.1, 1);
+    -o-transition: 0.7s 0.3s allcubic-bezier(0.1, 0.1, 0.1, 1);
+    transition: 0.7s 0.3s allcubic-bezier(0.1, 0.1, 0.1, 1);
+  }
+
+  @-webkit-keyframes spinner {
+    to {
+      -webkit-transform: rotateZ(360deg);
+      transform: rotateZ(360deg);
+    }
+  }
+
+  @keyframes spinner {
+    to {
+      -webkit-transform: rotateZ(360deg);
+      transform: rotateZ(360deg);
+    }
+  }
+
+  @-webkit-keyframes letters-loading {
+
+    0%,
+    75%,
+    100% {
+      opacity: 0;
+      -webkit-transform: rotateY(-90deg);
+      transform: rotateY(-90deg);
+    }
+
+    25%,
+    50% {
+      opacity: 1;
+      -webkit-transform: rotateY(0deg);
+      transform: rotateY(0deg);
+    }
+  }
+
+  @keyframes letters-loading {
+
+    0%,
+    75%,
+    100% {
+      opacity: 0;
+      -webkit-transform: rotateY(-90deg);
+      transform: rotateY(-90deg);
+    }
+
+    25%,
+    50% {
+      opacity: 1;
+      -webkit-transform: rotateY(0deg);
+      transform: rotateY(0deg);
+    }
+  }
+
+  @media screen and (max-width: 767px) {
+    .ctn-preloader .animation-preloader .spinner {
+      height: 8em;
+      width: 8em;
+    }
+
+    .ctn-preloader .animation-preloader .txt-loading {
+      font: bold 3.5em "Roboto", sans-serif;
+    }
+  }
+
+  @media screen and (max-width: 500px) {
+    .ctn-preloader .animation-preloader .spinner {
+      height: 7em;
+      width: 7em;
+    }
+
+    .ctn-preloader .animation-preloader .txt-loading {
+      font: bold 2em "Roboto", sans-serif;
+    }
+  }
+</style>
+{% endblock head %}
+
+{% block body %}
+<script>
+</script>
+<div class="container">
+  <div class="row">
+
+    <div class="mt-3 col-sm-12">
+      {% for message in messages %}
+      <div class="alert {{ message.tags }} alert-dismissible" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        {{ message }}
+      </div>
+      {% endfor %}
+    </div>
+
+    <div class="col-sm-6 col-12">
+      <div class="img-div">
+        <img src="{% static 'img/background-removal-banner-1.jpg' %}" class="image" />
+      </div>
+    </div>
+    <div class="col-sm-1 col-12"></div>
+    <div class="col-sm-5 col-12">
+      <div class="h1-text">
+        <h1 class="font_size">
+          Remove Image Background the Right Way<br /> on Your Own Comfort <br /> No Photoshop Skills Need
+        </h1>
+      </div>
+
+      <form method="POST" action="{% url 'bgremove' %}" id="upload-form" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="image-upload">
+          <label class="label-"><i class="fas fa-2x fa-upload"></i> <b>CHOOSE A PHOTO</b></label>
+
+          {% if user_info.type_standard == True or user_info.type_pro == True or user_info.type_advanced == True %}
+          <input type="file" name="file-picker" class="form-control upload-file hide_file" id="file-picker"
+            accept="image/png,image/jpg,image/jpeg" multiple />
+          {% else %}
+          <input type="file" name="file-picker" class="form-control upload-file hide_file" id="file-picker"
+            accept="image/png,image/jpg,image/jpeg" />
+          {% endif %}
+
+          <span class="span mt-2">or Drag and Drop images</span>
+          <input type="submit" id="submit-file" hidden />
+        </div>
+        <!-- <div class="ctrl+alt">
+          <p class="text-center mt-3">
+            Paste image<span><code> ctrl </code> + <code> V </code></span>
+          </p>
+        </div> -->
+      </form>
+      <p class="terms-conditions mt-3">
+        By uploading an image you agree to our Terms of Service . This
+        site is protected by reCaptcha and its Privacy Policy and Terms of
+        Service apply.
+      </p>
+    </div>
+  </div>
+
+  <!-- Why Photoliz  -->
+  <h2 class="text-center h2">WHY PHOTOLIZ</h2>
+  <div class="row">
+    <div class="col-lg-6 col-sm-6 col-md-6 col-12">
+      <img src="{% static 'img/photoliz.jpg' %}">
+    </div>
+    <div class="col-lg-6 col-sm-6 col-md-6 col-12">
+      <ul class="mt-20" style="list-style: disc;line-height: 30px;">
+        <h2 style="font-size: 1.45rem;">Photoliz unlike other software: </h2>
+        <li class="mt-2">Allows You to remove image background from any photos.</li>
+        <li>No photoshop skills needed.</li>
+        <li>100% Artificial Intelligence powered</li>
+        <li>Save Time and Money</li>
+        <li>Social Sharing just inside your Dashboard</li>
+        <li>Email sender built in</li>
+        <li>Photo Classifications</li>
+        <li>Security with encryption to protect your photos</li>
+        <li>And many more</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- how it works -->
+  <div class="py-5">
+    <h2 class="text-center h2">HOW IT WORKS</h2>
+    <div class="row">
+      <div class="col-lg-8 col-sm-12 col-md-12 col-12 m-auto d-block">
+        <h2 style="font-size: 1.45rem;" class="text-center">Photoliz is simple to use even 8 years old can perfectly
+          remove background image with these 3 simple steps</h2>
+        <center class="mt-3">
+          <ol style="line-height: 30px;">
+            <li>1. Sign up and login to your account</li>
+            <li>2. Upload/ drag & drop Your photos</li>
+            <li>3. Share</li>
+          </ol>
+        </center>
+      </div>
+    </div>
+  </div>
+  <!-- category gallery --------------------------------------------------------------------------->
+  <h2 class="text-center h2">PHOTO CLASSIFICATIONS</h2>
+  <p class="text-center">Photoliz allows to organize and classify your photos. There is no restriction as for the type
+    of image background you can remove.</p>
+  <section x-data="{cat: 'all'}" class="py-12">
+    <!-- Navbar -->
+    <ul class="flex justify-center flex-wrap">
+      <li>
+        <button id="people" @click="cat = 'people'"
+          :class="{'border-green-600 text-green-600 shadow-lg': cat === 'people'}" class="
+            text-gray-900
+            px-6
+            py-2
+            border-2
+            mr-5
+            hover:border-green-600
+            rounded-full
+            font-semibold
+            bg-white
+            text-sm
+            mb-5
+            focus:outline-none
+            transition-colors
+            duration-500
+          ">
+          People
+        </button>
+      </li>
+
+      <li>
+        <button @click="cat = 'animals'" :class="{'border-green-600 text-green-600 shadow-lg': cat === 'animals'}"
+          class="
+            text-gray-900
+            px-6
+            py-2
+            border-2
+            mr-5
+            hover:border-green-600
+            rounded-full
+            font-semibold
+            bg-white
+            text-sm
+            mb-5
+            focus:outline-none
+            transition-colors
+            duration-500
+          ">
+          Animals
+        </button>
+      </li>
+
+      <li>
+        <button @click="cat = 'products'" :class="{'border-green-600 text-green-600 shadow-lg': cat === 'products'}"
+          class="
+            text-gray-900
+            px-6
+            py-2
+            border-2
+            mr-5
+            hover:border-green-600
+            rounded-full
+            font-semibold
+            bg-white
+            text-sm
+            mb-5
+            focus:outline-none
+            transition-colors
+            duration-500
+          ">
+          Products
+        </button>
+      </li>
+
+      <li>
+        <button @click="cat = 'vehicles'" :class="{'border-green-600 text-green-600 shadow-lg': cat === 'vehicles'}"
+          class="
+            text-gray-900
+            px-6
+            py-2
+            border-2
+            mr-5
+            hover:border-green-600
+            rounded-full
+            font-semibold
+            bg-white
+            text-sm
+            mb-5
+            focus:outline-none
+            transition-colors
+            duration-500
+          ">
+          Vehicles
+        </button>
+      </li>
+
+      <li>
+        <button @click="cat = 'graphics'" :class="{'border-green-600 text-green-600 shadow-lg': cat === 'graphics'}"
+          class="
+            text-gray-900
+            px-6
+            py-2
+            border-2
+            hover:border-green-600
+            rounded-full
+            font-semibold
+            bg-white
+            text-sm
+            focus:outline-none
+            transition-colors
+            duration-500
+          ">
+          Graphics
+        </button>
+      </li>
+    </ul>
+    <!-- End: Navbar -->
+
+    <!-- Items -->
+    <ul class="m-auto d-block">
+      <li x-show.transition.duration.1000ms="['people'].includes(cat)" class="rounded-md overflow-hidden">
+        <img src="{% static 'img/banners/people.jpg' %}" alt="People" class="img" />
+      </li>
+
+      <li x-show.transition.duration.1000ms="['animals'].includes(cat)" class="rounded-md overflow-hidden">
+        <img src="{% static 'img/banners/animals.jpeg' %}" alt="Animals" class="img" />
+      </li>
+
+      <li x-show.transition.duration.1000ms="['products'].includes(cat)" class="rounded-md overflow-hidden">
+        <img src="{% static 'img/banners/products.jpeg' %}" alt="Products" class="img" />
+      </li>
+
+      <li x-show.transition.duration.1000ms="['vehicles'].includes(cat)" class="rounded-md overflow-hidden">
+        <img src="{% static 'img/banners/car.jpeg' %}" alt="Vehicles" class="img" />
+      </li>
+
+      <li x-show.transition.duration.1000ms="['graphics'].includes(cat)" class="rounded-md overflow-hidden">
+        <img src="{% static 'img/banners/graphics.jpeg' %}" alt="Graphics" class="img" />
+      </li>
+    </ul>
+  </section>
+
+  <!-- testimonials ------------------------------------------------------------------------------->
+  <!-- <h2 class="text-center mb-5 h2">What they says'</h2>
+  <div id="demo" class="carousel slide mb-5" data-ride="carousel">
+    <div class="carousel-inner">
+      <div class="carousel-item active">
+        <div class="carousel-caption">
+          <p>
+            If Shai Reznik's TDD videos don't convince you to add automated
+            testing your code, I don't know what will.This was the very best
+            explanation of frameworks for brginners that I've ever seen.
+          </p>
+          <img src="https://i.imgur.com/lE89Aey.jpg" />
+          <div id="image-caption">Nick Doe</div>
+        </div>
+      </div>
+      <div class="carousel-item">
+        <div class="carousel-caption">
+          <p>
+            If Shai Reznik's TDD videos don't convince you to add automated
+            testing your code, I don't know what will.This was the very best
+            explanation of frameworks for brginners that I've ever seen.
+          </p>
+          <img src="https://i.imgur.com/QptVdsp.jpg" class="img-fluid" />
+          <div id="image-caption">Cromption Greves</div>
+        </div>
+      </div>
+      <div class="carousel-item">
+        <div class="carousel-caption">
+          <p>
+            If Shai Reznik's TDD videos don't convince you to add automated
+            testing your code, I don't know what will.This was the very best
+            explanation of frameworks for brginners that I've ever seen.
+          </p>
+          <img src="https://i.imgur.com/jQWThIn.jpg" class="img-fluid" />
+          <div id="image-caption">Harry Mon</div>
+        </div>
+      </div>
+    </div>
+    <a class="carousel-control-prev" href="#demo" data-slide="prev">
+      <i class="fas fa-arrow-left"></i>
+    </a>
+    <a class="carousel-control-next" href="#demo" data-slide="next">
+      <i class="fas fa-arrow-right"></i>
+    </a>
+  </div> -->
+</div>
+
+<!-- pricing plans -------------------------------------------------->
+<h2 class="demo-title h2">PRICING PLANS</h2>
+<br />
+<div class="pricing-table">
+  <div class="ptable-item">
+    <div class="ptable-single">
+      <div class="ptable-header">
+        <div class="ptable-title">
+          <h2>STANDARD</h2>
+        </div>
+        <div class="ptable-price">
+          <h2><small>$</small>27<span>/ Y</span></h2>
+        </div>
+      </div>
+      <div class="ptable-body">
+        <div class="ptable-description">
+          <ul>
+            <li>Medium Data storage</li>
+            <li>Advanced edit tools</li>
+            <li>Advance photo Effects</li>
+            <li>Upload your own image background</li>
+            <li>Sync photos online to access anywhere online</li>
+            <li>Support JPG and PNG file formats for download</li>
+            <li>Render unlimited images</li>
+            <li>Photo Frames</li>
+            <!-- <li>Resize images</li>
+            <li>Crop images</li> -->
+            <li>
+              <p>
+                <strong>Photos Classifications: </strong><span> People, Animal</span>
+              </p>
+            </li>
+            <li><b>Upgrade/ Downgrade</b></li>
+          </ul>
+        </div>
+      </div>
+      <div class="ptable-footer">
+        <div>
+          <form action="{% url 'process_payment' %}" method="" class="ptable-action">
+            <input type="hidden" value="27" name="std" />
+            <button id="planbtn" type="submit">Buy Now</button>
+          </form>
+        </div>
+        <!-- <div class="ptable-action">
+					<a href="{% url 'process_payment' %}?price=27">Buy Now</a>
+				</div> -->
+      </div>
+    </div>
+  </div>
+
+  <div class="ptable-item featured-item">
+    <div class="ptable-single">
+      <div class="ptable-header">
+        <div class="ptable-status">
+          <span>Hot</span>
+        </div>
+        <div class="ptable-title">
+          <h2>PRO</h2>
+        </div>
+        <div class="ptable-price">
+          <h2><small>$</small>47<span>/ Y</span></h2>
+        </div>
+      </div>
+      <div class="ptable-body">
+        <div class="ptable-description">
+          <ul>
+            <li><b>All the standard Features</b></li>
+            <li>Support JPG and PNG file formats for download</li>
+            <li>Past the link of your images</li>
+            <li>More background images to choose</li>
+            <li>Higher Data Storage</li>
+            <li>Social sharing</li>
+            <li>Advanced Photo Frames</li>
+            <!-- <li>Stylish Fonts</li>
+            <li>Photo Editor with drag and drop</li> -->
+            <li>
+              <p>
+                <strong>Photos Classifications:</strong><span> People, Product, Animals.</span>
+              </p>
+            </li>
+            <li><b>Upgrade/ Downgrade</b></li>
+          </ul>
+        </div>
+      </div>
+      <div class="ptable-footer">
+        <div>
+          <form action="{% url 'process_payment' %}" method="" class="ptable-action">
+            <input type="hidden" value="47" name="std" />
+            <button type="submit">Buy Now</button>
+          </form>
+        </div>
+        <!-- <div class="ptable-action">
+          <a href="{% url 'process_payment' %}?price=47">Buy Now</a>
+        </div> -->
+      </div>
+    </div>
+  </div>
+
+  <div class="ptable-item">
+    <div class="ptable-single">
+      <div class="ptable-header">
+        <div class="ptable-title">
+          <h2>ADVANCED</h2>
+        </div>
+        <div class="ptable-price">
+          <h2><small>$</small>67<span>/ Y</span></h2>
+        </div>
+      </div>
+      <div class="ptable-body">
+        <div class="ptable-description">
+          <ul>
+            <li><b>All the Pro Features</b></li>
+            <li>Support JPG and PNG file formats for download</li>
+            <!-- <li>Advanced Photo Editor with drag and drop</li> -->
+            <li>Higher Data Storage</li>
+            <!-- <li>Advanced Stylish Fonts</li> -->
+            <li>add logo or watermark to protect your images</li>
+            <li>Commercial license</li>
+            <li>Send email from the software</li>
+            <li>Commercial License</li>
+            <li>
+              <p>
+                <strong>Photos Classifications:</strong>
+                <span>People, Product, Animals, Vehicle.</span>
+              </p>
+            </li>
+            <li><b>Upgrade/ Downgrade</b></li>
+            <br>
+          </ul>
+        </div>
+      </div>
+      <div class="ptable-footer">
+        <div>
+          <form action="{% url 'process_payment' %}" method="" class="ptable-action">
+            <input type="hidden" value="67" name="std" />
+            <button type="submit">Buy Now</button>
+          </form>
+        </div>
+        <!-- <div class="ptable-action">
+          <a href="{% url 'process_payment' %}?price=67">Buy Now</a>
+        </div> -->
+      </div>
+    </div>
+  </div>
+</div>
+<br>
+<div id="preloader">
+
+  <div id="ctn-preloader" class="ctn-preloader">
+
+    <div class="animation-preloader">
+
+      <div class="spinner"></div>
+
+      <div class="txt-loading">
+
+        <span data-text-preloader="P" class="letters-loading">
+
+          P
+
+        </span>
+
+        <span data-text-preloader="H" class="letters-loading">
+
+          H
+
+        </span>
+
+        <span data-text-preloader="O" class="letters-loading">
+
+          O
+
+        </span>
+
+
+        <span data-text-preloader="T" class="letters-loading">
+
+          T
+
+        </span>
+
+        <span data-text-preloader="O" class="letters-loading">O</span>
+
+        <span data-text-preloader="L" class="letters-loading">L</span>
+
+        <span data-text-preloader="I" class="letters-loading">I</span>
+
+        <span data-text-preloader="Z" class="letters-loading">Z</span>
+      </div>
+    </div>
+
+    <div class="loader">
+      <div class="row">
+        <div class="col-3 loader-section section-left">
+          <div class="bg"></div>
+        </div>
+
+        <div class="col-3 loader-section section-left">
+          <div class="bg"></div>
+        </div>
+
+        <div class="col-3 loader-section section-right">
+          <div class="bg"></div>
+        </div>
+
+        <div class="col-3 loader-section section-right">
+          <div class="bg"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock body %}

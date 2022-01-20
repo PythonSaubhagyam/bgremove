@@ -1,0 +1,258 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <title>
+    
+    {% block title %}
+      
+    {% endblock title %}
+      
+  </title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+
+
+  <!-- bootstrap -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}" />
+
+  <script src="{% static 'js/upload.js' %}"></script>
+
+  <!-- testiminilas -->
+  <link rel="stylesheet" type="text/css" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" />
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+  <script type="text/javascript" src="https://stackpath.bootstrapcdn.com/bootstrap/4.0.0/js/
+	bootstrap.bundle.min.js"></script>
+
+  <!-- footer -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+
+  <!-- category gallery -->
+  <link rel="stylesheet" type="text/css"
+    href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.1.2/tailwind.min.css" />
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/alpinejs/2.8.2/alpine.js"></script>
+
+
+
+
+  {% block head %} {% endblock head %}
+</head>
+
+<body>
+  <header>
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-3">
+          <a href="/"><img src="{% static 'img/logo/logo.jpg' %}" width="150" /></a>
+        </div>
+        <div class="col-sm-6">
+          <ul class="d-flex justify-content-between menubar">
+            <li><a href="{% url 'home' %}" class="link">Home</a></li>
+            <li><a href="{% url 'dashboard' %}" class="link">Dashboard</a></li>
+            <li><a href="{% url 'aboutus' %}" class="link">About Us</a></li>
+
+            <li><a href="{% url 'contactus' %}" class="link">Contact Us</a></li>
+
+
+          
+          </ul>
+        </div>
+        <!-- <div class="col-sm-4"></div> -->
+        <div class="col-sm-3">
+          {% if request.session.Free %}
+
+          <a href="{% url 'logout' %}" class="btn btn-outline-primary btn-lg button-login" >
+            <i class="fas fa-sign-out-alt"></i> Logout
+            </a>
+          {% else %}
+          <a href="{% url 'login' %}" class="btn btn-primary btn-lg button-login">
+            <i class="fas fa-sign-in-alt"></i> Login / Sign up
+            </a>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </header>
+
+  {% block body %} {% endblock body %}
+
+  <!-- footer ----------------------------------------------------------------------------------------->
+  <footer>
+
+    <div class="copyright">
+      <a href="{% url 'termsofuse' %}" >Terms of Use</a> &nbsp;&nbsp;|&nbsp;&nbsp;
+      <a href="{% url 'privacy' %}">Privecy Policy</a> &nbsp;&nbsp;|&nbsp;&nbsp;
+      Copyright © 2021 Photoliz - All rights reserved
+      
+    </div>
+  </footer>
+  <script>
+    document.getElementsByClassName("donepage-return-to-merchant-button").click();
+
+  </script>
+  <!-- album gallery script -->
+  <script>
+    let modalId = $("#image-gallery");
+
+    $(document).ready(function () {
+      loadGallery(true, "a.thumbnail");
+
+      //This function disables buttons when needed
+      function disableButtons(counter_max, counter_current) {
+        $("#show-previous-image, #show-next-image").show();
+        if (counter_max === counter_current) {
+          $("#show-next-image").hide();
+        } else if (counter_current === 1) {
+          $("#show-previous-image").hide();
+        }
+      }
+
+      /**
+       *
+       * @param setIDs        Sets IDs when DOM is loaded. If using a PHP counter, set to false.
+       * @param setClickAttr  Sets the attribute for the click handler.
+       */
+
+      function loadGallery(setIDs, setClickAttr) {
+        let current_image,
+          selector,
+          counter = 0;
+
+        $("#show-next-image, #show-previous-image").click(function () {
+          if ($(this).attr("id") === "show-previous-image") {
+            current_image--;
+          } else {
+            current_image++;
+          }
+
+          selector = $('[data-image-id="' + current_image + '"]');
+          updateGallery(selector);
+        });
+
+        function updateGallery(selector) {
+          let $sel = selector;
+          current_image = $sel.data("image-id");
+          $("#image-gallery-title").text($sel.data("title"));
+          $("#image-gallery-image").attr("src", $sel.data("image"));
+          disableButtons(counter, $sel.data("image-id"));
+        }
+
+        if (setIDs == true) {
+          $("[data-image-id]").each(function () {
+            counter++;
+            $(this).attr("data-image-id", counter);
+          });
+        }
+        $(setClickAttr).on("click", function () {
+          updateGallery($(this));
+        });
+      }
+    });
+
+    // build key actions
+    $(document).keydown(function (e) {
+      switch (e.which) {
+        case 37: // left
+          if (
+            (modalId.data("bs.modal") || {})._isShown &&
+            $("#show-previous-image").is(":visible")
+          ) {
+            $("#show-previous-image").click();
+          }
+          break;
+
+        case 39: // right
+          if (
+            (modalId.data("bs.modal") || {})._isShown &&
+            $("#show-next-image").is(":visible")
+          ) {
+            $("#show-next-image").click();
+          }
+          break;
+
+        default:
+          return; // exit this handler for other keys
+      }
+      e.preventDefault(); // prevent the default action (scroll / move caret)
+    });
+  </script>
+
+
+  <!-- Contactus Form Script -->
+  <script type="text/javascript">
+		const toggleSwitch = document.querySelector('.theme-switch input[type="checkbox"]');
+
+		function switchTheme(e) {
+			if (e.target.checked) {
+				document.documentElement.setAttribute('data-theme', 'dark');
+			}
+			else {
+				document.documentElement.setAttribute('data-theme', 'light');
+			}
+		}
+
+		toggleSwitch.addEventListener('change', switchTheme, false);
+		const name = document.getElementById('name');
+		const email = document.getElementById('email');
+		const message = document.getElementById('message');
+		const contactForm = document.getElementById('contact-form');
+		const errorElement = document.getElementById('error');
+		const successMsg = document.getElementById('success-msg');
+		const submitBtn = document.getElementById('submit');
+
+		const validate = (e) => {
+			e.preventDefault();
+
+			if (name.value.length < 3) {
+				errorElement.innerHTML = 'Your name should be at least 3 characters long.';
+				return false;
+			}
+
+			if (!(email.value.includes('.') && (email.value.includes('@')))) {
+				errorElement.innerHTML = 'Please enter a valid email address.';
+				return false;
+			}
+
+			if (!emailIsValid(email.value)) {
+				errorElement.innerHTML = 'Please enter a valid email address.';
+				return false;
+			}
+
+			if (message.value.length < 15) {
+				errorElement.innerHTML = 'Please write a longer message.';
+				return false;
+			}
+
+			errorElement.innerHTML = '';
+			successMsg.innerHTML = 'Thank you! I will get back to you as soon as possible.';
+
+			e.preventDefault();
+			setTimeout(function () {
+				successMsg.innerHTML = '';
+				document.getElementById('contact-form').reset();
+			}, 6000);
+
+			return true;
+		}
+
+		const emailIsValid = email => {
+			return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+		}
+
+		submitBtn.addEventListener('click', validate);
+	</script>
+
+</body>
+
+</html>

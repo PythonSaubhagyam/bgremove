@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block head %}
+    
+{% endblock head %}
+
+{% block body %}
+<div class="container">
+    <center>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+    <div class="col-6 shadow" style="background-color: rgb(207, 206, 206);">
+        <br>
+        <br>
+        <div class="mt-3">
+            {% for message in messages %}
+              
+              {% if message.tags == 'alert-info' or message.tags == 'alert-success' %}
+                <div class="alert alert-dismissible" role="alert" style="background-color: skyblue;padding: 3px;">
+                  {{ message }}
+                </div>
+              {% else %}
+                <div class="alert alert-dismissible" role="alert" style="background-color: orange;padding: 3px;">
+                  {{ message }}
+                </div>
+              {% endif %}
+                 
+            
+            {% endfor %}
+          </div>
+        <br>
+        <h3>Please enter mail id you  want to share</h3><br>
+<form method='POST'>
+
+    {% csrf_token %}
+    <input type="email" name="email" class="col-7"><br><br>
+    <button type="submit" class="btn btn-dark">Submit</button>
+</form>
+<br>
+        <br>
+        <br>
+</div>
+</center>
+</div>
+
+{% endblock body %}
+    
+    
+
